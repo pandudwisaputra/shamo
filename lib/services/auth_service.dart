@@ -5,7 +5,7 @@ import 'package:shamo/models/user_model.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  String baseUrl = 'https://eed2-103-184-180-97.ngrok-free.app/api';
+  String baseUrl = 'http://178.128.62.145/api';
 
   Future<UserModel> register({
     required String name,
@@ -20,6 +20,8 @@ class AuthService {
       'email': email,
       'username': username,
       'password': password,
+
+      // '_token':
     });
 
     var response = await http.post(url, headers: headers, body: body);
@@ -55,7 +57,7 @@ class AuthService {
       print(response.body);
     }
 
-    if (response.statusCode == 200){
+    if (response.statusCode == 200) {
       var data = jsonDecode(response.body)['data'];
       UserModel user = UserModel.fromJson(data['user']);
       user.token = 'Bearer ${data['access_token']}';

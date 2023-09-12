@@ -139,7 +139,7 @@ class EditProfilePage extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
-                image: NetworkImage(user.profilePhotoPath!),
+                image: NetworkImage(user.profilePhotoUrl!),
               ),
             ),
           ),

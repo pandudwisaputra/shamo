@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shamo/models/user_model.dart';
 import 'package:shamo/providers/auth_provider.dart';
+import 'package:shamo/providers/product_provider.dart';
 import 'package:shamo/theme.dart';
 import 'package:shamo/widgets/product_card.dart';
 import 'package:shamo/widgets/product_tile.dart';
@@ -13,6 +14,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     UserModel user = authProvider.user;
+    ProductProvider productProvider = Provider.of<ProductProvider>(context);
 
     Widget header() {
       return Container(
@@ -51,7 +53,7 @@ class HomePage extends StatelessWidget {
                 shape: BoxShape.circle,
                 image: DecorationImage(
                   image: NetworkImage(
-                    user.profilePhotoPath!,
+                    user.profilePhotoUrl!,
                   ),
                 ),
               ),
@@ -206,14 +208,15 @@ class HomePage extends StatelessWidget {
           top: 14,
           left: defaultMargin,
         ),
-        child: const SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
-          child: Row(children: [
-            ProductCard(),
-            ProductCard(),
-            ProductCard(),
-          ]),
+          child: Row(
+              children: productProvider.products
+                  .map((product) => ProductCard(
+                        product: product,
+                      ))
+                  .toList()),
         ),
       );
     }
@@ -238,12 +241,14 @@ class HomePage extends StatelessWidget {
     Widget newArrivals() {
       return Container(
         margin: const EdgeInsets.only(top: 14),
-        child: const Column(children: [
-          ProductTile(),
-          ProductTile(),
-          ProductTile(),
-          ProductTile(),
-        ]),
+        child: Column(
+            children: productProvider.products
+                .map(
+                  (product) => ProductTile(
+                    product: product,
+                  ),
+                )
+                .toList()),
       );
     }
 
